@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Foodgrain Dosage Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; background: #f4f4f9; }
+    h1 { color: #2c3e50; }
+    .menu { margin-bottom: 20px; }
+    .menu button { margin: 5px; padding: 10px 20px; cursor: pointer; }
+    .result { background: #fff; padding: 15px; border-radius: 5px; margin-top: 20px; }
+    input { margin: 5px; padding: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Foodgrain Preservation Dosage Calculator</h1>
+  
+  <div class="menu">
+    <button onclick="showForm('malathion')">Malathion Dosage</button>
+    <button onclick="showForm('deltamethrin')">Deltamethrin Dosage</button>
+    <button onclick="showForm('operational')">Operational Area</button>
+    <button onclick="showForm('aip')">Aluminium Phosphide Dosage</button>
+  </div>
+
+  <div id="formArea"></div>
+  <div class="result" id="result"></div>
+
+<script>
+function surfaceArea(L, B, H) {
+  return (2 * (L + B) * H + (L * B)) * 1.10;
+}
+
+function showForm(type) {
+  let formHTML = "";
+  if (type === "malathion" || type === "deltamethrin") {
+    formHTML = `
+      <h3>${type === "malathion" ? "Malathion" : "Deltamethrin"} Input</h3>
+      Length: <input id="L" type="number" step="0.01"> m<br>
+      Breadth: <input id="B" type="number" step="0.01"> m<br>
+      Height: <input id="H" type="number" step="0.01"> m<br>
+      Stacks: <input id="stacks" type="number"><br>
+      <button onclick="calculate('${type}')">Calculate</button>
+    `;
+  } else if (type === "operational") {
+    formHTML = `
+      <h3>Operational Area Input</h3>
+      Godown Length: <input id="totalL" type="number" step="0.01"> m<br>
+      Godown Breadth: <input id="totalB" type="number" step="0.01"> m<br>
+      Stack Length: <input id="stackL" type="number" step="0.01"> m<br>
+      Stack Breadth: <input id="stackB" type="number" step="0.01"> m<br>
+      Stacks: <input id="stacks" type="number"><br>
+      <button onclick="calculate('operational')">Calculate</button>
+    `;
+  } else if (type === "aip") {
+    formHTML = `
+      <h3>Aluminium Phosphide Input</h3>
+      Method: <select id="method">
+        <option value="cover">Cover</option>
+        <option value="cap">CAP</option>
+        <option value="shed">Shed</option>
+      </select><br>
+      Weight (MT): <input id="weight" type="number" step="0.01"><br>
+      Volume (g): <input id="volume" type="number" step="0.01"><br>
+      Khapra Infestation? <select id="khapra"><option value="no">No</option><option value="yes">Yes</option></select><br>
+      <button onclick="calculate('aip')">Calculate</button>
+    `;
+  }
+  document.getElementById("formArea").innerHTML = formHTML;
+  document.getElementById("result").innerHTML = "";
+}
+
+
+function calculate(type) {
+  let result = "";
+  if (type === "malathion") {
+    let L = parseFloat(document.getElementById("L").value);
+    let B = parseFloat(document.getElementById("B").value);
+    let H = parseFloat(document.getElementById("H").value);
+    let stacks = parseInt(document.getElementById("stacks").value);
+    let area = surfaceArea(L, B, H);
+    let solution = (3 * area) / 100;
+    let chemical = solution / 100;
+    result = `
+      Surface Area: ${area.toFixed(2)} m²<br>
+      Solution Required: ${solution.toFixed(2)} L<br>
+      Chemical Required: ${(chemical*1000).toFixed(2)} ml<br>
+      Total for ${stacks} stacks: ${(chemical*1000*stacks).toFixed(2)} ml
+    `;
+  } else if (type === "deltamethrin") {
+    let L = parseFloat(document.getElementById("L").value);
+    let B = parseFloat(document.getElementById("B").value);
+    let H = parseFloat(document.getElementById("H").value);
+    let stacks = parseInt(document.getElementById("stacks").value);
+    let area = surfaceArea(L, B, H);
+    let solution = (3 * area) / 100;
+    let chemical = 40 * solution;
+    result = `
+      Surface Area: ${area.toFixed(2)} m²<br>
+      Solution Required: ${solution.toFixed(2)} L<br>
+      Chemical Required: ${chemical.toFixed(2)} g<br>
+      Total for ${stacks} stacks: ${(chemical*stacks/1000).toFixed(2)} kg
+    `;
+  } else if (type === "operational") {
+    let totalL = parseFloat(document.getElementById("totalL").value);
+    let totalB = parseFloat(document.getElementById("totalB").value);
+    let stackL = parseFloat(document.getElementById("stackL").value);
+    let stackB = parseFloat(document.getElementById("stackB").value);
+    let stacks = parseInt(document.getElementById("stacks").value);
+    let totalFloor = totalL * totalB;
+    let stackArea = stackL * stackB;
+    let occupied = stackArea * stacks;
+    result = `Operational Area: ${(totalFloor - occupied).toFixed(2)} m²`;
+  } else if (type === "aip") {
+    let method = document.getElementById("method").value;
+    let weightMT = parseFloat(document.getElementById("weight").value);
+    let weightG = parseFloat(document.getElementById("volume").value); // now treated as grams
+    let khapra = document.getElementById("khapra").value === "yes";
+    let dose = 0;
+
+    if (method === "cover") dose = 9 * weightMT;
+    else if (method === "cap") dose = 9 * weightMT * 1.2;
+    else if (method === "shed") dose = (63 / 28) * weightG; // using grams instead of m³
+
+    if (khapra) dose *= 1.5;
+    result = `AIP Dosage: ${dose.toFixed(2)} g`;
+  }
+  document.getElementById("result").innerHTML = result;
+}
+
+</script>
+</body>
+</html>
