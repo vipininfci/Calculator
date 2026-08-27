@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SL Calculator</title>
+
+<style>
+    :root {
+        --primary: #176b45;
+        --primary-dark: #0f5132;
+        --primary-light: #eaf6ef;
+        --blue: #2563eb;
+        --blue-light: #eff6ff;
+        --border: #d9e2dc;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --bg: #f3f6f4;
+        --white: #ffffff;
+        --danger: #b42318;
+        --danger-bg: #feeceb;
+        --success: #167a45;
+        --success-bg: #e8f7ee;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background:
+            linear-gradient(135deg, #eef5f0, #f7faf8);
+        color: var(--text);
+    }
+
+    .container {
+        max-width: 1050px;
+        margin: 0 auto;
+        padding: 24px 16px 40px;
+    }
+
+    /* HEADER */
+
+    .app-header {
+        background: linear-gradient(
+            135deg,
+            var(--primary-dark),
+            var(--primary)
+        );
+        color: white;
+        padding: 25px 30px;
+        border-radius: 18px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 24px rgba(23, 107, 69, 0.18);
+    }
+
+    .app-header h1 {
+        margin: 0;
+        font-size: 30px;
+        letter-spacing: 0.4px;
+    }
+
+    .app-header p {
+        margin: 6px 0 0;
+        font-size: 15px;
+        opacity: 0.9;
+    }
+
+    /* CARD */
+
+    .card {
+        background: var(--white);
+        border: 1px solid #e5ebe7;
+        border-radius: 18px;
+        padding: 22px;
+        margin-bottom: 20px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .section-title {
+        margin: 0 0 18px;
+        color: var(--primary-dark);
+        font-size: 21px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .section-subtitle {
+        color: var(--muted);
+        margin-top: -10px;
+        margin-bottom: 18px;
+        font-size: 14px;
+    }
+
+    /* LABEL / INPUT */
+
+    label {
+        display: block;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 7px;
+        color: #374151;
+    }
+
+    input,
+    select {
+        width: 100%;
+        padding: 12px 13px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        font-size: 15px;
+        outline: none;
+        background: white;
+        transition: 0.2s;
+    }
+
+    input:focus,
+    select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(23, 107, 69, 0.12);
+    }
+
+    /* COMMODITY */
+
+    .commodity-row {
+        max-width: 600px;
+    }
+
+    /* RECEIPT / ISSUE */
+
+    .input-columns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+    }
+
+    .input-panel {
+        border-radius: 15px;
+        padding: 20px;
+        border: 1px solid var(--border);
+    }
+
+    .receipt-panel {
+        background: var(--primary-light);
+    }
+
+    .issue-panel {
+        background: var(--blue-light);
+        border-color: #cdddfb;
+    }
+
+    .panel-heading {
+        margin: 0 0 18px;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .receipt-panel .panel-heading {
+        color: var(--primary-dark);
+    }
+
+    .issue-panel .panel-heading {
+        color: #1d4ed8;
+    }
+
+    .field {
+        margin-bottom: 15px;
+    }
+
+    .field:last-child {
+        margin-bottom: 0;
+    }
+
+    /* BUTTONS */
+
+    .button-row {
+        display: flex;
+        gap: 14px;
+        margin-top: 22px;
+    }
+
+    button {
+        border: none;
+        border-radius: 11px;
+        padding: 14px 20px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .calculate-btn {
+        flex: 2;
+        color: white;
+        background: linear-gradient(
+            135deg,
+            var(--primary-dark),
+            var(--primary)
+        );
+    }
+
+    .calculate-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 7px 15px rgba(23, 107, 69, 0.2);
+    }
+
+    .reset-btn {
+        flex: 1;
+        color: #374151;
+        background: #eef1ef;
+    }
+
+    .reset-btn:hover {
+        background: #e1e7e3;
+    }
+
+    /* RESULT */
+
+    #resultSection {
+        display: none;
+    }
+
+    .result-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+    .result-item {
+        background: #fafcfb;
+        border: 1px solid #e3eae5;
+        border-radius: 13px;
+        padding: 16px;
+    }
+
+    .result-label {
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 7px;
+    }
+
+    .result-value {
+        color: #18231d;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .final-result {
+        grid-column: 1 / -1;
+        padding: 22px;
+        border-radius: 14px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+    }
+
+    .justified {
+        background: var(--success-bg);
+        color: var(--success);
+        border: 1px solid #b9e5c8;
+    }
+
+    .unjustified {
+        background: var(--danger-bg);
+        color: var(--danger);
+        border: 1px solid #f3b9b4;
+    }
+
+    /* PRINT */
+
+    .print-btn {
+        width: 100%;
+        margin-top: 22px;
+        color: white;
+        background: linear-gradient(135deg, #1d4ed8, #2563eb);
+    }
+
+    .print-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 7px 15px rgba(37, 99, 235, 0.18);
+    }
+
+    /* PRINT ONLY HEADER */
+
+    .print-info {
+        display: none;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 700px) {
+
+        .container {
+            padding: 14px 10px 30px;
+        }
+
+        .app-header {
+            padding: 20px;
+        }
+
+        .app-header h1 {
+            font-size: 25px;
+        }
+
+        .card {
+            padding: 16px;
+            border-radius: 14px;
+        }
+
+        .input-columns,
+        .result-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .button-row {
+            flex-direction: column;
+        }
+
+        .final-result {
+            grid-column: auto;
+        }
+    }
+
+    /* PRINT SETTINGS */
+
+    @media print {
+
+        @page {
+            margin: 12mm;
+        }
+
+        body {
+            background: white;
+            color: black;
+        }
+
+        .container {
+            max-width: 100%;
+            padding: 0;
+        }
+
+        .no-print,
+        .app-header {
+            display: none !important;
+        }
+
+        .print-info {
+            display: block;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid black;
+            padding-bottom: 10px;
+        }
+
+        .print-info h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .print-info p {
+            margin: 5px 0;
+        }
+
+        .card {
+            box-shadow: none;
+            border: 1px solid #999;
+            break-inside: avoid;
+            margin-bottom: 15px;
+        }
+
+        .input-columns,
+        .result-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        input,
+        select {
+            border: 1px solid #aaa;
+            color: black;
+            background: white;
+        }
+
+        .receipt-panel,
+        .issue-panel {
+            background: white;
+        }
+    }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- APP HEADER -->
+
+    <div class="app-header">
+        <h1>SL Calculator</h1>
+        <p>Storage Loss Calculator</p>
+    </div>
+
+
+    <!-- PRINT HEADER -->
+
+    <div class="print-info">
+        <h1>SL Calculator</h1>
+        <p>Storage Loss Calculation Statement</p>
+        <p id="printCommodity"></p>
+    </div>
+
+
+    <!-- COMMODITY SELECTION -->
+
+    <div class="card no-print">
+
+        <h2 class="section-title">
+            Select Commodity
+        </h2>
+
+        <div class="commodity-row">
+
+            <label for="commodity">
+                Commodity / Region
+            </label>
+
+            <select id="commodity">
+
+                <option value="WHEAT_CONSUMING">
+                    Wheat Consuming
+                </option>
+
+                <option value="WHEAT_PROCURING">
+                    Wheat Procuring
+                </option>
+
+                <option value="RICE_CONSUMING">
+                    Rice Consuming
+                </option>
+
+                <option value="RICE_PROCURING">
+                    Rice Procuring
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <!-- INPUT SECTION -->
+
+    <div class="card">
+
+        <h2 class="section-title">
+            Input Details
+        </h2>
+
+        <p class="section-subtitle">
+            Enter Receipt and Issue / Dispatch details.
+        </p>
+
+
+        <div class="input-columns">
+
+
+            <!-- RECEIPT -->
+
+            <div class="input-panel receipt-panel">
+
+                <h3 class="panel-heading">
+                    Receipt Details
+                </h3>
+
+
+                <div class="field">
+
+                    <label for="receiptDate">
+                        Receipt Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="receiptDate"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="receiptBags">
+                        Receipt Bags
+                    </label>
+
+                    <input
+                        type="number"
+                        id="receiptBags"
+                        min="0"
+                        step="1"
+                        placeholder="Enter bags"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="receiptQty">
+                        Receipt Quantity (Qntl.)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="receiptQty"
+                        min="0"
+                        step="any"
+                        placeholder="Enter quantity"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="initialMoisture">
+                        Initial Moisture - M/C (i)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="initialMoisture"
+                        min="0"
+                        max="100"
+                        step="any"
+                        placeholder="Enter moisture"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- ISSUE -->
+
+            <div class="input-panel issue-panel">
+
+                <h3 class="panel-heading">
+                    Issue / Dispatch Details
+                </h3>
+
+
+                <div class="field">
+
+                    <label for="issueDate">
+                        Issue / Dispatch Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="issueDate"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="issueBags">
+                        Issue / Dispatch Bags
+                    </label>
+
+                    <input
+                        type="number"
+                        id="issueBags"
+                        min="0"
+                        step="1"
+                        placeholder="Enter bags"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="issueQty">
+                        Issue / Dispatch Quantity (Qntl.)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="issueQty"
+                        min="0"
+                        step="any"
+                        placeholder="Enter quantity"
+                    >
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="finalMoisture">
+                        Liquidation Moisture - M/C (l)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="finalMoisture"
+                        min="0"
+                        max="100"
+                        step="any"
+                        placeholder="Enter moisture"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="button-row no-print">
+
+            <button
+                type="button"
+                class="calculate-btn"
+                onclick="calculate()">
+
+                CALCULATE
+
+            </button>
+
+
+            <button
+                type="button"
+                class="reset-btn"
+                onclick="resetCalculator()">
+
+                RESET
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESULT SECTION -->
+
+    <div
+        class="card"
+        id="resultSection">
+
+        <h2 class="section-title">
+            Calculation Result
+        </h2>
+
+
+        <div class="result-grid">
+
+
+            <!-- PERIOD -->
+
+            <div class="result-item">
+
+                <div class="result-label">
+                    Period of Storage
+                </div>
+
+                <div
+                    class="result-value"
+                    id="storageDays">
+
+                    -
+
+                </div>
+
+            </div>
+
+
+            <!-- MOISTURE CHANGE -->
+
+            <div class="result-item">
+
+                <div class="result-label">
+                    Moisture Change
+                </div>
+
+                <div
+                    class="result-value"
+                    id="moistureChange">
+
+                    -
+
+                </div>
+
+            </div>
+
+
+            <!-- LOSS / GAIN QTY -->
+
+            <div class="result-item">
+
+                <div class="result-label">
+                    Loss / Gain Quantity
+                </div>
+
+                <div
+                    class="result-value"
+                    id="gainLossQty">
+
+                    -
+
+                </div>
+
+            </div>
+
+
+            <!-- LOSS / GAIN % -->
+
+            <div class="result-item">
+
+                <div class="result-label">
+                    Loss / Gain %
+                </div>
+
+                <div
+                    class="result-value"
+                    id="gainLossPercent">
+
+                    -
+
+                </div>
+
+            </div>
+
+
+            <!-- ALLOWED LOSS QTY -->
+
+            <div class="result-item">
+
+                <div class="result-label">
+                    Allowed / Required Loss Quantity
+                </div>
+
+                <div
+                    class="result-value"
+                    id="requiredLossQty">
+
+                    -
+
+                </div>
+
+            </div>
+
+
+            <!-- UNJUSTIFIED LOSS -->
+
+            <div class="result-item">
+
+                <div class="result-label">
+                    Unjustified Loss Quantity
+                </div>
+
+                <div
+                    class="result-value"
+                    id="unjustifiedLoss">
+
+                    -
+
+                </div>
+
+            </div>
+
+
+            <!-- FINAL RESULT -->
+
+            <div
+                class="final-result"
+                id="finalResult">
+
+                RESULT
+
+            </div>
+
+
+        </div>
+
+
+        <!-- PRINT -->
+
+        <button
+            type="button"
+            class="print-btn no-print"
+            onclick="printReport()">
+
+            🖨 PRINT INPUT & RESULT
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ==========================================
+   CALCULATION ENGINES
+========================================== */
+
+const CalculationEngines = {
+
+    WHEAT_CONSUMING: {
+
+        name: "Wheat Consuming",
+
+        uncertainty: 0.05,
+
+        calculateICAR(mi, ml, storageDays) {
+
+            const sp = storageDays / 30;
+
+            return (
+                0.618 * mi
+                - 0.627 * ml
+                + 0.011 * sp
+            );
+        }
+
+    },
+
+
+    WHEAT_PROCURING: {
+
+        name: "Wheat Procuring",
+
+        uncertainty: 0.05,
+
+        calculateICAR(mi, ml, storageDays) {
+
+            const sp = storageDays / 30;
+
+            return (
+                0.578 * mi
+                - 0.577 * ml
+                - 0.007 * sp
+            );
+        }
+
+    },
+
+
+    RICE_CONSUMING: {
+
+        name: "Rice Consuming",
+
+        uncertainty: 0.08,
+
+        calculateICAR(mi, ml, storageDays) {
+
+            const sp = storageDays / 30;
+
+            return (
+                0.819 * mi
+                - 0.822 * ml
+                + 0.01 * sp
+            );
+        }
+
+    },
+
+
+    RICE_PROCURING: {
+
+        name: "Rice Procuring",
+
+        uncertainty: 0.06,
+
+        calculateICAR(mi, ml, storageDays) {
+
+            const sp = storageDays / 30;
+
+            return (
+                0.737 * mi
+                - 0.753 * ml
+                + 0.0251 * sp
+            );
+        }
+
+    }
+
+};
+
+
+/* ==========================================
+   DATE DIFFERENCE
+
+   Date.UTC is used to avoid timezone problems.
+========================================== */
+
+function getDaysBetween(startDate, endDate) {
+
+    const startParts = startDate.split("-").map(Number);
+    const endParts = endDate.split("-").map(Number);
+
+    const start = Date.UTC(
+        startParts[0],
+        startParts[1] - 1,
+        startParts[2]
+    );
+
+    const end = Date.UTC(
+        endParts[0],
+        endParts[1] - 1,
+        endParts[2]
+    );
+
+    const millisecondsPerDay =
+        1000 * 60 * 60 * 24;
+
+    return Math.round(
+        (end - start) / millisecondsPerDay
+    );
+}
+
+
+/* ==========================================
+   FULL VALUE CUT
+
+   This remains hidden from the output screen.
+
+   Current rule:
+   0 unless an exact Excel Full Value Cut formula
+   is required to be inserted.
+========================================== */
+
+function calculateFullValueCut(initialMoisture) {
+
+    if (initialMoisture <= 14) {
+        return 0;
+    }
+
+    /*
+       Add exact Excel Full Value Cut formula here
+       if applicable.
+    */
+
+    return 0;
+}
+
+
+/* ==========================================
+   NUMBER FORMAT
+========================================== */
+
+function formatNumber(value, decimals = 4) {
+
+    if (!Number.isFinite(value)) {
+        return "-";
+    }
+
+    return Number(value).toFixed(decimals);
+}
+
+
+/* ==========================================
+   MAIN CALCULATION
+========================================== */
+
+function calculate() {
+
+    /* SELECTED COMMODITY */
+
+    const commodityKey =
+        document
+            .getElementById("commodity")
+            .value;
+
+    const engine =
+        CalculationEngines[commodityKey];
+
+
+    /* INPUT VALUES */
+
+    const receiptDate =
+        document
+            .getElementById("receiptDate")
+            .value;
+
+    const receiptBags =
+        Number(
+            document
+                .getElementById("receiptBags")
+                .value
+        );
+
+    const receiptQty =
+        Number(
+            document
+                .getElementById("receiptQty")
+                .value
+        );
+
+    const initialMoisture =
+        Number(
+            document
+                .getElementById("initialMoisture")
+                .value
+        );
+
+    const issueDate =
+        document
+            .getElementById("issueDate")
+            .value;
+
+    const issueBags =
+        Number(
+            document
+                .getElementById("issueBags")
+                .value
+        );
+
+    const issueQty =
+        Number(
+            document
+                .getElementById("issueQty")
+                .value
+        );
+
+    const finalMoisture =
+        Number(
+            document
+                .getElementById("finalMoisture")
+                .value
+        );
+
+
+    /* VALIDATION */
+
+    if (
+        !receiptDate ||
+        !issueDate ||
+
+        document
+            .getElementById("receiptBags")
+            .value === "" ||
+
+        document
+            .getElementById("receiptQty")
+            .value === "" ||
+
+        document
+            .getElementById("initialMoisture")
+            .value === "" ||
+
+        document
+            .getElementById("issueBags")
+            .value === "" ||
+
+        document
+            .getElementById("issueQty")
+            .value === "" ||
+
+        document
+            .getElementById("finalMoisture")
+            .value === ""
+    ) {
+
+        alert(
+            "Please fill all Receipt and Issue details."
+        );
+
+        return;
+    }
+
+
+    /* NEGATIVE VALUE CHECK */
+
+    if (
+        receiptBags < 0 ||
+        receiptQty < 0 ||
+        initialMoisture < 0 ||
+        issueBags < 0 ||
+        issueQty < 0 ||
+        finalMoisture < 0
+    ) {
+
+        alert(
+            "Negative values are not allowed."
+        );
+
+        return;
+    }
+
+
+    /* STORAGE PERIOD */
+
+    const storageDays =
+        getDaysBetween(
+            receiptDate,
+            issueDate
+        );
+
+
+    if (storageDays < 0) {
+
+        alert(
+            "Issue / Dispatch Date cannot be earlier than Receipt Date."
+        );
+
+        return;
+    }
+
+
+    /* MOISTURE CHANGE */
+
+    const moistureChange =
+        initialMoisture
+        - finalMoisture;
+
+
+    /* ACTUAL LOSS / GAIN QUANTITY */
+
+    const gainLossQty =
+        receiptQty
+        - issueQty;
+
+
+    /* ACTUAL LOSS / GAIN PERCENT */
+
+    const gainLossPercent =
+        receiptQty !== 0
+            ?
+            (
+                gainLossQty
+                / receiptQty
+            ) * 100
+            :
+            0;
+
+
+    /* FULL VALUE CUT
+       Hidden from output
+    */
+
+    const fullValueCut =
+        calculateFullValueCut(
+            initialMoisture
+        );
+
+
+    /* ICAR CALCULATION
+       Hidden from output
+    */
+
+    let icarResult =
+        engine.calculateICAR(
+            initialMoisture,
+            finalMoisture,
+            storageDays
+        );
+
+
+    /*
+       Excel-based special condition:
+       Same moisture + storage below 31 days
+       = no ICAR allowance / uncertainty.
+
+       This condition can be made commodity-specific
+       later if any sheet differs.
+    */
+
+    const sameMoisture =
+        Math.abs(
+            initialMoisture - finalMoisture
+        ) < 0.0000001;
+
+
+    if (
+        sameMoisture &&
+        storageDays < 31
+    ) {
+
+        icarResult = 0;
+
+    }
+
+
+    /* UNCERTAINTY
+       Hidden from output
+    */
+
+    let uncertainty =
+        engine.uncertainty;
+
+
+    if (
+        sameMoisture &&
+        storageDays < 31
+    ) {
+
+        uncertainty = 0;
+
+    }
+
+
+    /* TOTAL ALLOWABLE LOSS % */
+
+    const totalLossIncludingError =
+        fullValueCut
+        + icarResult
+        + uncertainty;
+
+
+    /*
+       REQUIRED / ALLOWED LOSS %
+
+       Hidden from output.
+
+       Logic retained for calculation:
+       If actual loss exceeds allowance including
+       uncertainty, use base allowance.
+    */
+
+    let requiredLossPercent;
+
+
+    if (
+        gainLossPercent >
+        totalLossIncludingError
+    ) {
+
+        requiredLossPercent =
+            fullValueCut
+            + icarResult;
+
+    } else {
+
+        requiredLossPercent =
+            totalLossIncludingError;
+
+    }
+
+
+    /*
+       If calculated allowance is negative,
+       keep it at zero.
+    */
+
+    requiredLossPercent =
+        Math.max(
+            0,
+            requiredLossPercent
+        );
+
+
+    /* ALLOWED / REQUIRED LOSS QUANTITY */
+
+    const requiredLossQty =
+        (
+            requiredLossPercent
+            * receiptQty
+        ) / 100;
+
+
+    /* UNJUSTIFIED LOSS QUANTITY */
+
+    let unjustifiedLossQty =
+        gainLossQty
+        - requiredLossQty;
+
+
+    if (unjustifiedLossQty < 0) {
+
+        unjustifiedLossQty = 0;
+
+    }
+
+
+    /* FINAL RESULT */
+
+    const result =
+        unjustifiedLossQty <= 0.000001
+            ?
+            "JUSTIFIED"
+            :
+            "UNJUSTIFIED";
+
+
+    /* ======================================
+       DISPLAY OUTPUT
+    ====================================== */
+
+    document
+        .getElementById("storageDays")
+        .textContent =
+            storageDays + " Days";
+
+
+    document
+        .getElementById("moistureChange")
+        .textContent =
+            formatNumber(
+                moistureChange,
+                4
+            );
+
+
+    document
+        .getElementById("gainLossQty")
+        .textContent =
+            formatNumber(
+                gainLossQty,
+                4
+            )
+            + " Qntl.";
+
+
+    document
+        .getElementById("gainLossPercent")
+        .textContent =
+            formatNumber(
+                gainLossPercent,
+                4
+            )
+            + " %";
+
+
+    document
+        .getElementById("requiredLossQty")
+        .textContent =
+            formatNumber(
+                requiredLossQty,
+                4
+            )
+            + " Qntl.";
+
+
+    document
+        .getElementById("unjustifiedLoss")
+        .textContent =
+            formatNumber(
+                unjustifiedLossQty,
+                4
+            )
+            + " Qntl.";
+
+
+    /* FINAL RESULT */
+
+    const finalResultBox =
+        document
+            .getElementById("finalResult");
+
+
+    finalResultBox.textContent =
+        "RESULT: " + result;
+
+
+    finalResultBox.className =
+        "final-result "
+        + (
+            result === "JUSTIFIED"
+                ?
+                "justified"
+                :
+                "unjustified"
+        );
+
+
+    /* PRINT COMMODITY */
+
+    document
+        .getElementById("printCommodity")
+        .textContent =
+            "Commodity: "
+            + engine.name;
+
+
+    /* SHOW RESULT */
+
+    const resultSection =
+        document
+            .getElementById("resultSection");
+
+
+    resultSection.style.display =
+        "block";
+
+
+    resultSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+}
+
+
+/* ==========================================
+   RESET
+========================================== */
+
+function resetCalculator() {
+
+    document
+        .getElementById("receiptDate")
+        .value = "";
+
+    document
+        .getElementById("receiptBags")
+        .value = "";
+
+    document
+        .getElementById("receiptQty")
+        .value = "";
+
+    document
+        .getElementById("initialMoisture")
+        .value = "";
+
+    document
+        .getElementById("issueDate")
+        .value = "";
+
+    document
+        .getElementById("issueBags")
+        .value = "";
+
+    document
+        .getElementById("issueQty")
+        .value = "";
+
+    document
+        .getElementById("finalMoisture")
+        .value = "";
+
+
+    document
+        .getElementById("commodity")
+        .value =
+            "WHEAT_CONSUMING";
+
+
+    document
+        .getElementById("resultSection")
+        .style.display =
+            "none";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* ==========================================
+   PRINT
+========================================== */
+
+function printReport() {
+
+    window.print();
+
+}
+
+</script>
+
+</body>
+</html>
