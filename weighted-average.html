@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Weighted Average · SL Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="average">
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark">SL</span><span><strong>SL Calculator</strong><small>Storage Loss Calculator</small></span></a>
+    <nav aria-label="Main navigation">
+      <a href="index.html">SL Calculator</a>
+      <a href="loss.html">Loss Calculator</a>
+      <a class="active" href="weighted-average.html">Weighted Average</a>
+      <a href="chemical.html">Chemical Calculator</a>
+    </nav>
+  </header>
+  <main class="page-shell narrow">
+    <section class="intro"><p class="eyebrow">MOISTURE ANALYSIS</p><h1>Weighted Average</h1><p>Calculate average moisture based on bags received from each truck.</p></section>
+    <section class="card calculator-card">
+      <div class="truck-setup">
+        <label>Number of Trucks<input id="truck-count" type="number" min="1" max="100" step="1" placeholder="e.g. 3"></label>
+        <button id="create-trucks" type="button">Create Truck Rows</button>
+      </div>
+      <p class="form-error" id="average-error" role="alert"></p>
+      <form id="average-form" class="hidden" novalidate>
+        <div class="section-heading"><h2>Truck Details</h2><span>Bags and moisture for each truck</span></div>
+        <div id="truck-rows" class="truck-rows"></div>
+        <button type="submit">Calculate Weighted Average</button>
+      </form>
+      <section class="results hidden" id="average-results" aria-live="polite">
+        <div class="section-heading"><h2>Result</h2></div>
+        <dl class="result-grid two-results">
+          <div><dt>Total Bags</dt><dd id="total-bags">—</dd></div>
+          <div><dt>Average Moisture</dt><dd id="average-moisture">—</dd></div>
+        </dl>
+      </section>
+    </section>
+  </main>
+  <footer>Positivity is the key of Happiness - VBS</footer>
+  <script src="app.js"></script>
+</body>
+</html>

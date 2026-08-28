@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SL Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="sl">
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark">SL</span><span><strong>SL Calculator</strong><small>Storage Loss Calculator</small></span></a>
+    <nav aria-label="Main navigation">
+      <a class="active" href="index.html">SL Calculator</a>
+      <a href="loss.html">Loss Calculator</a>
+      <a href="weighted-average.html">Weighted Average</a>
+      <a href="chemical.html">Chemical Calculator</a>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="intro">
+      <p class="eyebrow">FOODGRAIN STORAGE</p>
+      <h1>SL Calculator</h1>
+      <p>Calculate storage gain/loss using the selected commodity formula.</p>
+    </section>
+
+    <section class="card calculator-card">
+      <form id="sl-form" novalidate>
+        <div class="section-heading"><h2>Inputs</h2><span>All quantities are in Qtl</span></div>
+        <div class="form-grid">
+          <label class="full">Commodity
+            <select id="commodity" required>
+              <option value="wheat-consuming">Wheat Consuming</option>
+              <option value="wheat-procuring">Wheat Procuring</option>
+              <option value="rice-consuming">Rice Consuming</option>
+              <option value="rice-procuring">Rice Procuring</option>
+            </select>
+          </label>
+          <label>Receipt Date<input id="receipt-date" type="date" required></label>
+          <label>Receipt Qty <input id="receipt-qty" type="number" step="0.00001" min="0" placeholder="0.00000" required></label>
+          <label>Initial Moisture (%)<input id="initial-moisture" type="number" step="0.01" min="0" placeholder="0.00" required></label>
+          <label>Issue Date<input id="issue-date" type="date" required></label>
+          <label>Issue Qty <input id="issue-qty" type="number" step="0.00001" min="0" placeholder="0.00000" required></label>
+          <label>Final Moisture (%)<input id="final-moisture" type="number" step="0.01" min="0" placeholder="0.00" required></label>
+        </div>
+        <p class="form-error" id="sl-error" role="alert"></p>
+        <div class="button-row">
+          <button type="submit">Calculate</button>
+          <button class="secondary" id="sl-print" type="button" disabled>Print / Save PDF</button>
+        </div>
+      </form>
+
+      <section class="results hidden" id="sl-results" aria-live="polite">
+        <div class="section-heading"><h2>Result</h2><span>Calculated automatically</span></div>
+        <dl class="result-grid">
+          <div><dt>Period of Storage</dt><dd id="storage-days">—</dd></div>
+          <div><dt>Moisture Change</dt><dd id="moisture-change">—</dd></div>
+          <div><dt>Gain / Loss Qty</dt><dd id="gain-loss-qty">—</dd></div>
+          <div><dt>Gain / Loss %</dt><dd id="gain-loss-percent">—</dd></div>
+          <div><dt>Allowed Gain / Loss</dt><dd id="allowed-gain-loss">—</dd></div>
+          <div><dt>Unjustified Loss</dt><dd id="unjustified-loss">—</dd></div>
+        </dl>
+        <div class="verdict" id="sl-verdict">—</div>
+      </section>
+    </section>
+  </main>
+  <footer>Positivity is the key of Happiness - VBS</footer>
+  <script src="app.js"></script>
+</body>
+</html>

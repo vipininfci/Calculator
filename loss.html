@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loss Calculator · SL Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="loss">
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark">SL</span><span><strong>SL Calculator</strong><small>Storage Loss Calculator</small></span></a>
+    <nav aria-label="Main navigation">
+      <a href="index.html">SL Calculator</a>
+      <a class="active" href="loss.html">Loss Calculator</a>
+      <a href="weighted-average.html">Weighted Average</a>
+      <a href="chemical.html">Chemical Calculator</a>
+    </nav>
+  </header>
+  <main class="page-shell narrow">
+    <section class="intro"><p class="eyebrow">GLOBAL CALCULATION</p><h1>Loss Calculator</h1><p>Plan targeted loss and the remaining weight for issue or receipt.</p></section>
+    <section class="card calculator-card">
+      <form id="loss-form" novalidate>
+        <div class="section-heading"><h2>Inputs</h2><span>All weights are in Qtl</span></div>
+        <div class="form-grid single-column">
+          <label>Total Weight<input id="total-weight" type="number" step="0.00001" min="0" placeholder="0.00000" required></label>
+          <label>Issue or Receipt Weight till now<input id="current-weight" type="number" step="0.00001" min="0" placeholder="0.00000" required></label>
+          <label>Targeted Loss Quantity<input id="target-loss" type="number" step="0.00001" min="0" placeholder="0.00000" required></label>
+        </div>
+        <p class="form-error" id="loss-error" role="alert"></p>
+        <button type="submit">Calculate</button>
+      </form>
+      <section class="results hidden" id="loss-results" aria-live="polite">
+        <div class="section-heading"><h2>Result</h2></div>
+        <dl class="result-grid two-results">
+          <div><dt>Loss (%)</dt><dd id="loss-percent">—</dd></div>
+          <div><dt>Balance Weight to Issue/Receipt</dt><dd id="balance-weight">—</dd></div>
+        </dl>
+      </section>
+    </section>
+  </main>
+  <footer>Positivity is the key of Happiness - VBS</footer>
+  <script src="app.js"></script>
+</body>
+</html>

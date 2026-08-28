@@ -1,0 +1,88 @@
+:root {
+  --forest: #116432;
+  --forest-dark: #093d20;
+  --sage: #e8f3eb;
+  --gold: #d99b1b;
+  --ink: #173027;
+  --muted: #64756c;
+  --surface: #ffffff;
+  --line: #d8e4dc;
+  --danger: #b42318;
+  --shadow: 0 16px 48px rgba(24, 68, 45, .10);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; background: linear-gradient(130deg, #f4f8f3, #fff 44%, #eef5f0); color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+.site-header { width: min(1180px, calc(100% - 32px)); margin: 0 auto; min-height: 84px; display: flex; gap: 24px; align-items: center; justify-content: space-between; }
+.brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; color: var(--forest-dark); }
+.brand-mark { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; background: var(--forest); color: white; font-weight: 800; letter-spacing: -.05em; box-shadow: 0 5px 14px rgba(17, 100, 50, .23); }
+.brand strong, .brand small { display: block; }
+.brand strong { font-size: 1rem; }
+.brand small { color: var(--muted); font-size: .72rem; margin-top: 2px; }
+nav { display: flex; align-items: center; gap: 6px; }
+nav a { padding: 9px 12px; border-radius: 9px; color: var(--muted); text-decoration: none; font-size: .9rem; font-weight: 650; }
+nav a:hover, nav a.active { background: var(--sage); color: var(--forest-dark); }
+.page-shell { width: min(960px, calc(100% - 32px)); margin: 46px auto 42px; flex: 1; }
+.page-shell.narrow { width: min(720px, calc(100% - 32px)); }
+.intro { margin-bottom: 24px; max-width: 660px; }
+.eyebrow { margin: 0 0 8px; color: var(--forest); font-size: .73rem; font-weight: 800; letter-spacing: .14em; }
+h1 { margin: 0; font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -.055em; color: var(--forest-dark); }
+.intro > p:last-child { margin: 10px 0 0; color: var(--muted); line-height: 1.55; }
+.card { background: rgba(255, 255, 255, .96); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); }
+.calculator-card { padding: clamp(20px, 4vw, 34px); }
+.section-heading { display: flex; gap: 12px; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 20px; }
+.section-heading h2 { margin: 0; font-size: 1rem; color: var(--forest-dark); }
+.section-heading span { color: var(--muted); font-size: .8rem; }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 17px 18px; }
+.form-grid .full { grid-column: 1 / -1; }
+.single-column { grid-template-columns: 1fr; }
+label { display: grid; gap: 7px; color: var(--ink); font-size: .87rem; font-weight: 650; }
+input, select { width: 100%; appearance: none; border: 1px solid #b8ccc0; background: #fff; color: var(--ink); border-radius: 9px; padding: 11px 12px; min-height: 43px; font: inherit; font-weight: 500; outline: none; }
+input:focus, select:focus { border-color: var(--forest); box-shadow: 0 0 0 3px rgba(17, 100, 50, .13); }
+button { appearance: none; border: 0; border-radius: 9px; padding: 11px 16px; background: var(--forest); color: #fff; font: inherit; font-size: .9rem; font-weight: 750; cursor: pointer; transition: transform .15s ease, background .15s ease; }
+button:hover { background: var(--forest-dark); transform: translateY(-1px); }
+button:disabled { background: #b5c6ba; cursor: not-allowed; transform: none; }
+button.secondary { background: #e8f3eb; color: var(--forest-dark); border: 1px solid #b8ccc0; }
+button.secondary:hover { background: #d9eadc; }
+.button-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.form-error { min-height: 1.2em; color: var(--danger); margin: 14px 0 0; font-size: .88rem; font-weight: 600; }
+.results { margin-top: 31px; padding-top: 2px; }
+.result-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 0; }
+.result-grid > div { background: #f6faf7; border: 1px solid #dce9df; border-radius: 12px; padding: 14px; }
+dt { color: var(--muted); font-size: .79rem; font-weight: 650; }
+dd { margin: 5px 0 0; color: var(--forest-dark); font-size: 1.07rem; font-weight: 800; }
+.verdict { margin-top: 14px; border-radius: 12px; padding: 14px 16px; text-align: center; background: #e2f2e5; color: #075a2a; font-weight: 850; letter-spacing: .03em; }
+.verdict.unjustified { background: #fce8e6; color: var(--danger); }
+.truck-setup { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: end; }
+.truck-rows { display: grid; gap: 10px; margin-bottom: 20px; }
+.truck-row { display: grid; grid-template-columns: 68px 1fr 1fr; gap: 12px; align-items: end; padding: 14px; background: #f7faf7; border: 1px solid var(--line); border-radius: 12px; }
+.truck-number { min-height: 43px; display: flex; align-items: center; color: var(--forest); font-weight: 800; font-size: .9rem; }
+.calculator-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 24px; }
+button.tab { background: #eef5f0; border: 1px solid #c8ddcc; color: var(--forest-dark); padding: 9px 12px; font-size: .84rem; }
+button.tab:hover { background: #dcece0; }
+button.tab.active { background: var(--forest); border-color: var(--forest); color: white; }
+.hidden { display: none !important; }
+footer { width: min(1180px, calc(100% - 32px)); margin: auto auto 21px; color: var(--forest); text-align: center; font-size: .84rem; font-style: italic; }
+
+@media (max-width: 650px) {
+  .site-header { min-height: auto; padding: 16px 0; align-items: flex-start; flex-direction: column; }
+  nav { width: 100%; overflow-x: auto; padding-bottom: 1px; }
+  nav a { white-space: nowrap; }
+  .page-shell { margin-top: 24px; }
+  .form-grid, .result-grid { grid-template-columns: 1fr; }
+  .form-grid .full { grid-column: auto; }
+  .section-heading { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .truck-setup { grid-template-columns: 1fr; }
+  .truck-row { grid-template-columns: 1fr; gap: 10px; }
+  .truck-number { min-height: auto; }
+  .calculator-tabs { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 3px; }
+  button.tab { white-space: nowrap; }
+}
+
+@media print {
+  body { background: #fff; }
+  .site-header, footer, form, .intro { display: none !important; }
+  .page-shell { width: 100%; margin: 0; }
+  .card { border: 0; box-shadow: none; }
+  .results { display: block !important; margin-top: 0; }
+}

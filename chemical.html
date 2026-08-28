@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chemical Calculator · SL Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="chemical">
+  <header class="site-header">
+    <a class="brand" href="index.html"><span class="brand-mark">SL</span><span><strong>SL Calculator</strong><small>Storage Loss Calculator</small></span></a>
+    <nav aria-label="Main navigation">
+      <a href="index.html">SL Calculator</a>
+      <a href="loss.html">Loss Calculator</a>
+      <a href="weighted-average.html">Weighted Average</a>
+      <a class="active" href="chemical.html">Chemical Calculator</a>
+    </nav>
+  </header>
+  <main class="page-shell">
+    <section class="intro">
+      <p class="eyebrow">FOODGRAIN PRESERVATION</p>
+      <h1>Chemical Calculator</h1>
+      <p>Calculate chemical dosage and operational area for foodgrain storage.</p>
+    </section>
+    <section class="card calculator-card">
+      <div class="calculator-tabs" role="tablist" aria-label="Chemical calculator type">
+        <button class="tab active" type="button" data-chemical-type="malathion" role="tab" aria-selected="true">Malathion</button>
+        <button class="tab" type="button" data-chemical-type="deltamethrin" role="tab" aria-selected="false">Deltamethrin</button>
+        <button class="tab" type="button" data-chemical-type="operational" role="tab" aria-selected="false">Operational Area</button>
+        <button class="tab" type="button" data-chemical-type="aip" role="tab" aria-selected="false">Aluminium Phosphide</button>
+      </div>
+      <form id="chemical-form" novalidate>
+        <div class="section-heading"><h2 id="chemical-form-title">Malathion Dosage</h2><span id="chemical-form-hint">Dimensions are in metres</span></div>
+        <div id="chemical-inputs" class="form-grid"></div>
+        <p class="form-error" id="chemical-error" role="alert"></p>
+        <button type="submit">Calculate</button>
+      </form>
+      <section class="results hidden" id="chemical-results" aria-live="polite">
+        <div class="section-heading"><h2>Result</h2><span>Calculated automatically</span></div>
+        <dl class="result-grid" id="chemical-result-grid"></dl>
+      </section>
+    </section>
+  </main>
+  <footer>Positivity is the key of Happiness - VBS</footer>
+  <script src="app.js"></script>
+</body>
+</html>
